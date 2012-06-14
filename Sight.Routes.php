@@ -14,12 +14,14 @@ class Routes {
 	function errorAdd($errorCode, $docPath) {
 		$this->errorRoutes[$errorCode] = new Route("//",$docPath,function(){});
 	}
-	function findRoute($request) {
+	function findRoutes($request) {
+		$result = array();
 		for($i=0; $i<count($this->routes); $i++) {
 			if($this->routes[$i]->matchesUrl($request) == true)
-				return $this->routes[$i];
+				$result[] = $this->routes[$i];
 		}
-		return $this->get404Route();
+		$result[] = $this->get404Route();
+		return $result;
 	}
 	function get404Route() {
 		if($this->errorRoutes[404]) {
@@ -47,7 +49,8 @@ class Route {
 		for($j=0; $j<count($matches); $j++) {
 			$needles[] = "$" . $j;
 		}
-		return str_replace($needles,$matches[0],$this->path);
+		$result = str_replace($needles,$matches,$this->path);
+		return $result;
 	}
 	function getModel($url) {
 		if(!$this->matchesUrl($url))

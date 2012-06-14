@@ -24,12 +24,16 @@ class Sight {
 	
 		$request = array_key_exists('url',$_GET) ? $_GET['url'] : "";
 	
-		$route = $this->routes->findRoute($request);
-		$path = $route->getPath($request);
+		$routes = $this->routes->findRoutes($request);
 		
-		if(!file_exists($path)) {
-			$route = $this->routes->get404Route();
+		$path = "";
+		
+		foreach($routes as $route) {
 			$path = $route->getPath($request);
+		
+			if(file_exists($path)) {
+				break;
+			}
 		}
 		
 		$data = new Sight\ResponseData();
