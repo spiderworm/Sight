@@ -23,7 +23,7 @@ class ConditionParser {
 				$rightSide = new SubResult($matches[3]);
 			}
 			
-			Parser::parseRightSide($rightSide,$data);
+			BlockParser::parseRightSide($rightSide,$data);
 
 			$result->contents .= $rightSide->contents;
 			$result->unparsed = $rightSide->unparsed;

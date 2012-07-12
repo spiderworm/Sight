@@ -18,9 +18,7 @@ class TemplateParser {
 			Parser::parseRightSide($rightSide,$data);
 		
 			$path = $rightSide->contents;
-			
-			//echo "<p>found template, parsing template file " . $path . "</p>";
-			
+
 			self::parseTemplate($result,$data,$path);
 			
 			$result->unparsed = $rightSide->unparsed;

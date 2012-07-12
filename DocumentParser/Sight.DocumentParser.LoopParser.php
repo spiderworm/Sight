@@ -27,7 +27,7 @@ class LoopParser {
 						$data->set($varName,$key);
 					$data->set($varValue,$value);
 					$lastSubResult = new SubResult($subText);
-					Parser::parseRightSide($lastSubResult,$data);
+					BlockParser::parseRightSide($lastSubResult,$data);
 					$result->add($lastSubResult);
 				}
 			//}

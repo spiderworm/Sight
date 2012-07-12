@@ -15,14 +15,14 @@ class IncludeParser {
 
 			$rightSide = new SubResult($matches[1]);
 			
-			Parser::parseRightSide($rightSide,$data);
+			BlockParser::parseRightSide($rightSide,$data);
 		
 			$path = $rightSide->contents;
 
 			$result->unparsed = $rightSide->unparsed;
 
 			self::parseInclude($result,$data,$path);
-			
+
 			return true;
 		}
 
