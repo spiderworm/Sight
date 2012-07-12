@@ -12,7 +12,7 @@ class VariableParser {
 	public static function init() {
 		self::$varSetterRegExp = "/^\s*" . Parser::$varRegExp . " *= *" . Parser::$anythingRegExp . "$/";
 		self::$varEchoRegExp = "/^\s*" . Parser::$varRegExp . Parser::$anythingRegExp . "$/";
-		self::$siteRootEchoRegExp = "/^@site\.root[\/\\]?" . Parser::$anythingRegExp . "$/";
+		self::$siteRootEchoRegExp = "/^@site\.root[\/\\\]?" . Parser::$anythingRegExp . "$/";
 		self::$defaultDocumentTemplateSetterRegExp = "/^\s*@defaultDocumentTemplate *([^\s]*)" . Parser::$anythingRegExp . "$/";
 	}
 	
