@@ -21,6 +21,32 @@ class SubResult {
 	function toString() {
 		return $this->before . $this->contents . $this->after;
 	}
+	function isReady() {
+		return $this->unparsed == "";
+	}
+	function stripOff($regex) {
+		$chunkSize = 2000;
+		$str = "";
+		if(strlen($this->unparsed) > $chunkSize) {
+			$str = substr($this->unparsed, 0, $chunkSize);
+		} else {
+			$str = $this->unparsed;
+		}
+		if(preg_match("/^" . $regex . "/", $str, $matches)) {
+			$this->unparsed = substr($this->unparsed,strlen($matches[0]));
+			return $matches;
+		}
+		return false;
+	}
+	function pullSubParse() {
+		$sub = new SubResult($this->unparsed);
+		$this->unparsed = "";
+		return $sub;
+	}
+	function foldInSubParse($subResult) {
+		$this->unparsed = $subResult->unparsed . $this->unparsed;
+		$this->contents .= $subResult->contents;
+	}
 }
 
 ?>

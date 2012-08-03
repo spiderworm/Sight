@@ -11,26 +11,26 @@ class LoopParser {
 	}
 	
 	public static function parse($result,$data) {
-		if(preg_match(self::$loopRegExp,$result->unparsed,$matches) > 0) {
-
+		
+		if($matches = $result->stripOff("\s*@(\w+(?:[\w\.]+\w+)*) +as +@(\w+(?:[\w\.]+\w+)*)(?: += +@(\w+(?:[\w\.]+\w+)*))?")) {
+			
 			$iterableVarName = $matches[1];
 			$iterableVar = $data->get($iterableVarName);
 			$varName = $matches[3] != "" ? $matches[2] : "";
 			$varValue = $matches[3] != "" ? $matches[3] : $matches[2];
-			$subText = $matches[4];
+			$subText = $result->unparsed;
 
 			$lastSubResult = null;
-			
-			//if(is_array($iterableVar)) {
-				foreach($iterableVar as $key=>$value) {
-					if($varName != "")
-						$data->set($varName,$key);
-					$data->set($varValue,$value);
-					$lastSubResult = new SubResult($subText);
-					BlockParser::parseRightSide($lastSubResult,$data);
-					$result->add($lastSubResult);
-				}
-			//}
+
+			foreach($iterableVar as $key=>$value) {
+				if($varName != "")
+					$data->set($varName,$key);
+				$data->set($varValue,$value);
+				$lastSubResult = new SubResult($subText);
+				BlockParser::parseRightSide($lastSubResult,$data);
+				$result->add($lastSubResult);
+			}
+
 
 			if(is_null($lastSubResult)) {
 				$lastSubResult = new SubResult($subText);

@@ -20,16 +20,18 @@ class Parser {
 
 	public static function init() {		
 		self::$rightSideRegExp = "/^(?:\s*@\{" . self::$anythingRegExp . "$| *([^\r\n\f]*)@\{" . self::$anythingRegExp . "$|([^\r\n\f]*)" . self::$anythingRegExp . "$)/";
-		self::$textRegExp = "/^([^@]*)" . self::$anythingRegExp . "$/";
+		self::$textRegExp = "/^([^@]*)" . self::$anythingRegExp . "$/"; // "/^([^@]*)((?:.|\s)*)$/";
 		self::$chunkEndRegExp = "/^@\}" . self::$anythingRegExp . "$/";
 	}
 
-	public static function parse($result,$data,$includes = array()) {
+	public static function parse($result,$data,$includes = array()) {			
+
 		foreach($includes as $includePath) {
 			IncludeParser::parseInclude($result,$data,$includePath);
 		}
+
+		while(!$result->isReady()) {			
 	
-		while($result->unparsed != "") {
 			self::parseText($result,$data);
 
 			if(BlockParser::parseBlockEnd($result,$data)) {
@@ -71,26 +73,27 @@ class Parser {
 			
 		}
 		
-		if(!is_null($result->defaultDocumentTemplatePath) && $result->documentTemplateParsed == false) {
+		if(!is_null($result->defaultDocumentTemplatePath) && $result->documentTemplateParsed == false) {		
 			TemplateParser::parseTemplate($result,$data,$result->defaultDocumentTemplatePath);
 		}
 	}
 
 	function parseEscapedSymbol($result) {
-		if(preg_match("/^@(.)" . self::$anythingRegExp . "$/",$result->unparsed,$matches) > 0) {
-			$result->contents .= $matches[1];
-			$result->unparsed = $matches[2];
-			return true;
+		if($matches = $result->stripOff("@.")) {
+			$result->contents .= substr($matches[0],1,1);
+			return true;	
 		}
 		return false;
 	}
 	
 	function parseText($result) {
-		preg_match(self::$textRegExp,$result->unparsed,$matches);
-		$result->contents .= $matches[1];
-		$result->unparsed = $matches[2];
+		if($matches = $result->stripOff("[^@]*+")) {
+			$result->contents .= $matches[0];
+			return true;
+		}
+		return false;
 	}
-	
+
 }
 
 Parser::init();

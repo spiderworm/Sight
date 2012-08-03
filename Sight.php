@@ -20,37 +20,54 @@ class Sight {
 	}
 	
 	function respond() {
-		$response = new Sight\Response();
-	
+
 		$request = array_key_exists('url',$_GET) ? $_GET['url'] : "";
-	
+		
+		$indexRequest = $request;
+		if($indexRequest[strlen($indexRequest)-1] != "/")
+			$indexRequest .= "/";
+		$indexRequest .= "index";
+
 		$routes = $this->routes->findRoutes($request);
 		
+		$route = NULL;
 		$path = "";
 		
 		foreach($routes as $route) {
 			$path = $route->getPath($request);
-		
+			if(file_exists($path)) {
+				break;
+			}
+			
+			$path = $route->getPath($indexRequest);
 			if(file_exists($path)) {
 				break;
 			}
 		}
 		
-		$data = new Sight\ResponseData();
+		if(is_null($route)) {
+			header("Status: 500 Internal Service Error");
+			echo "no route found and no proper 404";
+			exit("no route found and no proper 404");
+		}
+
+		$data = new Sight\ResponseData();		
 		$data->set("site.title",$this->title);
 		$data->set("site.root",$this->root);
 		$data->set("model",$route->getModel($request));
 
+
+		$response = new Sight\Response($route->httpCode);
 		$response->document->setIncludes($this->includes);
 		$response->document->setContents(
 			file_get_contents($path),
 			$data,
 			$this->defaultTemplatePath
 		);
-		$response->document->send();
+		$response->send();
 	}
 	
-	function route($url,$docPath,$controller) {
+	function route($url,$docPath,$controller=null) {
 		if(is_null($controller))
 			$controller = function() { return new stdClass(); };
 		$this->routes->add($url,$docPath,$controller);

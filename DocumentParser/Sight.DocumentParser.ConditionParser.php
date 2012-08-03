@@ -13,7 +13,7 @@ class ConditionParser {
 	}
 	
 	public static function parse($result,$data) {
-		if(preg_match(self::$ifRegex,$result->unparsed,$matches) > 0) {			
+		if($matches = $result->stripOff("\s*@(\w+(?:[\w\.]+\w+)*) *\? *([^\r\n\f:]*) *: *([^\r\n\f]*)")) {
 
 			$value = $data->get($matches[1]);
 
@@ -22,13 +22,11 @@ class ConditionParser {
 			} else {
 				$rightSide = new SubResult($matches[3]);
 			}
-			
+
 			BlockParser::parseRightSide($rightSide,$data);
 
 			$result->contents .= $rightSide->contents;
-			$result->unparsed = $rightSide->unparsed;
-			
-			
+
 			return true;
 		}
 		return false;

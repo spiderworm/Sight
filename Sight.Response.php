@@ -3,9 +3,35 @@
 namespace Sight;
 
 class Response {
-	function __construct() {
+	function __construct($httpCode=200) {
+		$this->httpCode = $httpCode;
 		$this->document = new HtmlDocument();
 	}
+	function send() {
+		header("HTTP/1.1 " . $this->httpCode);
+		$this->document->send();	
+	}	
+}
+
+class EnhancedStdClass {
+	function __toString() {
+		$result = "";
+		foreach($this as $key=>$value) {
+			try {
+				$result .= (string)$key;
+			} catch(Exception $e) {
+				$result .= "{unknown key}";	
+			}
+			$result .= " => ";
+			try {
+				$result .= (string)$value;
+			} catch(Exception $e) {
+				$result .= "{unknown value}";	
+			}
+			$result .= "\n";
+		}
+		return $result;
+	}	
 }
 
 class ResponseData {
@@ -20,7 +46,7 @@ class ResponseData {
 		for($i=0; $i<count($dataPath)-1; $i++) {
 			$path = $dataPath[$i];
 			if(!isset($current->$path) || !is_object($current->$path)) {
-				$current->$path = new \stdClass();
+				$current->$path = new EnhancedStdClass();
 			}
 			$current = $current->$path;
 		}

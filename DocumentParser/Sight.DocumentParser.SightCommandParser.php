@@ -13,12 +13,12 @@ class SightCommandParser {
 	}
 	
 	public static function parse($result,$data) {
-		if(preg_match(self::$parserOffRegExp,$result->unparsed,$matches) > 0) {			
-
-			$contents = $matches[1];
+		if($matches = $result->stripOff("\s*@sight\.parser\.off([^\w\.]|$)")) {
+			
+			$contents = $matches[1] . $result->unparsed;
 			$unparsed = "";
 
-			$i = strpos($matches[1],"@sight.parser.on");
+			$i = strpos($contents,"@sight.parser.on");
 
 			if($i != false) {
 				$unparsed = substr($contents,$i+16);

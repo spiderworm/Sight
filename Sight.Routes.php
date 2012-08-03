@@ -13,6 +13,7 @@ class Routes {
 	}
 	function errorAdd($errorCode, $docPath) {
 		$this->errorRoutes[$errorCode] = new Route("//",$docPath,function(){});
+		$this->errorRoutes[$errorCode]->httpCode = $errorCode;
 	}
 	function findRoutes($request) {
 		$result = array();
@@ -36,6 +37,7 @@ class Route {
 		$this->url = $url;
 		$this->path = $path;
 		$this->controller = $controller;
+		$this->httpCode = "200";
 	}
 	function matchesUrl($url) {
 		return preg_match($this->url,$url) > 0;

@@ -11,7 +11,6 @@ class DocumentParser {
 	function parse($text,$data,$includes,$defaultTemplatePath = null) {
 		$result = new DocumentParser\SubResult($text);
 		$result->defaultDocumentTemplatePath = $defaultTemplatePath;
-		
 		DocumentParser\Parser::parse($result,$data,$includes);
 
 		return $result->toString();

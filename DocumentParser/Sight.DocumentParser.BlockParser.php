@@ -15,15 +15,10 @@ class BlockParser {
 	}
 	
 	public static function parse($result,$data) {
-		if(preg_match(self::$blockRegExp,$result->unparsed,$matches) > 0) {			
-
-			$sub = new SubResult($matches[1]);
-			
+		if($result->stripOff("\s*@\{")) {
+			$sub = $result->pullSubParse();
 			Parser::parse($sub,$data);
-
-			$result->contents .= $sub->contents;
-			$result->unparsed = $sub->unparsed;
-
+			$result->foldInSubParse($sub);
 			return true;
 		}
 		return false;
@@ -31,24 +26,23 @@ class BlockParser {
 
 
 	static public function parseRightSide($result,$data) {
-		if(preg_match(self::$rightSideRegExp,$result->unparsed,$matches) > 0) {
-			if(count($matches) == 2) {
-				$result->unparsed = $matches[1];
-				Parser::parse($result,$data);
-			} else if(count($matches) == 4) {
-				$result->unparsed = $matches[2] . $matches[3];
-				Parser::parse($result,$data);
-			} else if(count($matches) == 6) {
-				$result->unparsed = $matches[4];
-				Parser::parse($result,$data);
-				$result->unparsed .= $matches[5];
-			}
+		if(self::parse($result,$data)) {
+			return true;
 		}
+		
+		if($matches = $result->stripOff("[^\r\n\f]*")) {
+			$sub = new SubResult($matches[0]);
+			Parser::parse($sub,$data);
+			$result->unparsed = $sub->unparsed . $result->unparsed;
+			$result->contents .= $sub->contents;
+			return true;
+		}
+
+		return false;
 	}
 
 	static public function parseBlockEnd($result) {
-		if(preg_match(self::$rightSideEndRegExp,$result->unparsed,$matches) > 0) {	
-			$result->unparsed = $matches[1];
+		if($result->stripOff("@\}")) {
 			return true;
 		}
 		return false;

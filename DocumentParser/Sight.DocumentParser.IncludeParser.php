@@ -11,15 +11,12 @@ class IncludeParser {
 	}
 	
 	public static function parse($result,$data) {
-		if(preg_match(self::$includeRegex,$result->unparsed,$matches) > 0) {
-
+		if($matches = $result->stripOff("\s*@include *([^\r\n\f]*)")) {
 			$rightSide = new SubResult($matches[1]);
-			
-			BlockParser::parseRightSide($rightSide,$data);
-		
-			$path = $rightSide->contents;
 
-			$result->unparsed = $rightSide->unparsed;
+			BlockParser::parseRightSide($rightSide,$data);
+
+			$path = $rightSide->contents;
 
 			self::parseInclude($result,$data,$path);
 
