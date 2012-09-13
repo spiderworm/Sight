@@ -1,4 +1,4 @@
-<?
+<?php
 
 namespace Sight\DocumentParser;
 
@@ -13,9 +13,9 @@ class TemplateParser {
 	public static function parse($result,$data) {
 		if($matches = $result->stripOff(self::$templateRegex)) {
 
-			$rightSide = new SubResult($matches->unparsed);
+			$rightSide = new SubResult($result->unparsed);
 
-			Parser::parseRightSide($rightSide,$data);
+			BlockParser::parseRightSide($rightSide,$data);
 		
 			$path = $rightSide->contents;
 
@@ -55,5 +55,3 @@ class TemplateParser {
 }
 
 TemplateParser::init();
-
-?>

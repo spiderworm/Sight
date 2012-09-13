@@ -1,4 +1,4 @@
-<?
+<?php
 
 namespace Sight;
 
@@ -62,5 +62,3 @@ class Route {
 		return $controller($data);
 	}
 }
-
-?>

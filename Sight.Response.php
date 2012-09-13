@@ -1,4 +1,4 @@
-<?
+<?php
 
 namespace Sight;
 
@@ -82,5 +82,3 @@ class ResponseData {
 	}
 	
 }
-
-?>

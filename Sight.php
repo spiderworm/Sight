@@ -1,4 +1,4 @@
-<?
+<?php
 
 require_once("Sight.Routes.php");
 require_once("Sight.Response.php");
@@ -24,7 +24,7 @@ class Sight {
 		$request = array_key_exists('url',$_GET) ? $_GET['url'] : "";
 		
 		$indexRequest = $request;
-		if($indexRequest[strlen($indexRequest)-1] != "/")
+		if($indexRequest == "" || $indexRequest[strlen($indexRequest)-1] != "/")
 			$indexRequest .= "/";
 		$indexRequest .= "index";
 
@@ -93,5 +93,3 @@ class Sight {
 	}
 	
 }
-
-?>

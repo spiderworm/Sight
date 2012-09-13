@@ -1,4 +1,4 @@
-<?
+<?php
 
 namespace Sight;
 
@@ -17,7 +17,3 @@ class DocumentParser {
 	}
 
 }
-
-
-
-?>

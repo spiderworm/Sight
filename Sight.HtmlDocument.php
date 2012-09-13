@@ -1,4 +1,4 @@
-<?
+<?php
 
 namespace Sight;
 
@@ -23,5 +23,3 @@ class HtmlDocument {
 		echo $this->text;
 	}
 }
-
-?>

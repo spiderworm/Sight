@@ -1,4 +1,4 @@
-<?
+<?php
 
 namespace Sight\DocumentParser;
 
@@ -47,5 +47,3 @@ class VariableParser {
 }
 
 VariableParser::init();
-
-?>

@@ -1,4 +1,4 @@
-<?
+<?php
 
 namespace Sight\DocumentParser;
 
@@ -39,5 +39,3 @@ class IncludeParser {
 }
 
 IncludeParser::init();
-
-?>

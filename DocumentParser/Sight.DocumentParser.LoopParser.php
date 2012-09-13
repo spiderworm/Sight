@@ -1,4 +1,4 @@
-<?
+<?php
 
 namespace Sight\DocumentParser;
 
@@ -48,5 +48,3 @@ class LoopParser {
 }
 
 LoopParser::init();
-
-?>

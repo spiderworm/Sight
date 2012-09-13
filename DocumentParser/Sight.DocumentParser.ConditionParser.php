@@ -1,4 +1,4 @@
-<?
+<?php
 
 namespace Sight\DocumentParser;
 
@@ -35,5 +35,3 @@ class ConditionParser {
 }
 
 ConditionParser::init();
-
-?>

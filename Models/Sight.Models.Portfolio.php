@@ -1,4 +1,4 @@
-<?
+<?php
 
 namespace Sight\Models;
 
@@ -181,5 +181,3 @@ class Photo {
 		return $result;
 	}
 }
-
-?>
