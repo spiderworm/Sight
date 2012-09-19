@@ -24,7 +24,7 @@ class Sight {
 		$request = array_key_exists('url',$_GET) ? $_GET['url'] : "";
 		
 		$indexRequest = $request;
-		if($indexRequest == "" || $indexRequest[strlen($indexRequest)-1] != "/")
+		if($indexRequest != "" && $indexRequest[strlen($indexRequest)-1] != "/")
 			$indexRequest .= "/";
 		$indexRequest .= "index";
 
@@ -44,7 +44,7 @@ class Sight {
 				break;
 			}
 		}
-		
+
 		if(is_null($route)) {
 			header("Status: 500 Internal Service Error");
 			echo "no route found and no proper 404";
@@ -54,22 +54,23 @@ class Sight {
 		$data = new Sight\ResponseData();		
 		$data->set("site.title",$this->title);
 		$data->set("site.root",$this->root);
-		$data->set("model",$route->getModel($request));
+		$data->set("defaultTemplate",$this->defaultTemplatePath);
+		$data->set("document.path",$path);
+		$route->runController($data,$request);
 
 
 		$response = new Sight\Response($route->httpCode);
 		$response->document->setIncludes($this->includes);
 		$response->document->setContents(
 			file_get_contents($path),
-			$data,
-			$this->defaultTemplatePath
+			$data
 		);
 		$response->send();
 	}
 	
 	function route($url,$docPath,$controller=null) {
 		if(is_null($controller))
-			$controller = function() { return new stdClass(); };
+			$controller = function($o,$urlMatches) { };
 		$this->routes->add($url,$docPath,$controller);
 	}
 	

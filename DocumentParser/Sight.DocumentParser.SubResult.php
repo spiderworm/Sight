@@ -7,8 +7,7 @@ class SubResult {
 	var $after = "";
 	var $contents = "";
 	var $unparsed = "";
-	var $defaultDocumentTemplatePath = null;
-	var $documentTemplateParsed = false;
+	var $parsedTemplate = false;
 	
 	function __construct($text) {
 		$this->unparsed = $text;

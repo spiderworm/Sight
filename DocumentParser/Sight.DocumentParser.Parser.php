@@ -59,7 +59,7 @@ class Parser {
 			}
 			
 			if(TemplateParser::parse($result, $data)) {
-				$result->documentTemplateParsed = true;
+				$result->parsedTemplate = true;
 				continue;
 			}
 
@@ -73,9 +73,6 @@ class Parser {
 			
 		}
 		
-		if(!is_null($result->defaultDocumentTemplatePath) && $result->documentTemplateParsed == false) {		
-			TemplateParser::parseTemplate($result,$data,$result->defaultDocumentTemplatePath);
-		}
 	}
 
 	function parseEscapedSymbol($result) {

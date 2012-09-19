@@ -11,12 +11,11 @@ class HtmlDocument {
 	function setIncludes($includes) {
 		$this->includes = $includes;
 	}
-	function setContents($contents,$data,$defaultTemplatePath) {
+	function setContents($contents,$data) {
 		$this->text = $this->parser->parse(
 			$contents,
 			$data,
-			$this->includes,
-			$defaultTemplatePath
+			$this->includes
 		);
 	}
 	function send() {

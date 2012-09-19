@@ -51,14 +51,17 @@ class Route {
 		for($j=0; $j<count($matches); $j++) {
 			$needles[] = "$" . $j;
 		}
-		$result = str_replace($needles,$matches,$this->path);
+
+		$result = str_replace($needles,$matches,$this->path);	
+		
 		return $result;
 	}
-	function getModel($url) {
+	function runController($data,$url) {
 		if(!$this->matchesUrl($url))
 			return null;
-		preg_match($this->url,$url,$data);
+		preg_match($this->url,$url,$urlMatches);
+
 		$controller = $this->controller;
-		return $controller($data);
+		$controller($data,$urlMatches);
 	}
 }

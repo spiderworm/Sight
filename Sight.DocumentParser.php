@@ -8,10 +8,13 @@ require_once("DocumentParser/Sight.DocumentParser.TemplateParser.php");
 
 class DocumentParser {
 
-	function parse($text,$data,$includes,$defaultTemplatePath = null) {
+	function parse($text,$data,$includes) {
 		$result = new DocumentParser\SubResult($text);
-		$result->defaultDocumentTemplatePath = $defaultTemplatePath;
 		DocumentParser\Parser::parse($result,$data,$includes);
+
+		if(!is_null($data->get('defaultTemplate')) && $result->parsedTemplate == false) {		
+			DocumentParser\TemplateParser::parseTemplate($result,$data,$data->get('defaultTemplate'));
+		}
 
 		return $result->toString();
 	}
