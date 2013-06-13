@@ -21,12 +21,9 @@ class Sight {
 	
 	function respond() {
 
+		$response = new Sight\Response();
+
 		$request = array_key_exists('url',$_GET) ? $_GET['url'] : "";
-		
-		$indexRequest = $request;
-		if($indexRequest != "" && $indexRequest[strlen($indexRequest)-1] != "/")
-			$indexRequest .= "/";
-		$indexRequest .= "index";
 
 		$routes = $this->routes->findRoutes($request);
 		
@@ -34,38 +31,68 @@ class Sight {
 		$path = "";
 		
 		foreach($routes as $route) {
-			$path = $route->getPath($request);
-			if(file_exists($path)) {
-				break;
+			if($request === "" || $request === "/") {
+
+				$path = $route->getPath("index");
+				if($path !== NULL && file_exists($path)) {
+					$response->httpCode = $route->httpCode;
+					break;
+				}
+
+			} else {
+
+				$path = $route->getPath($request);
+				if($path !== NULL && file_exists($path)) {
+					$response->httpCode = $route->httpCode;
+					break;
+				}
+
+				if($request[strlen($request)-1] === "/") {
+
+					$path = $route->getPath($request . "index");
+					if($path !== NULL && file_exists($path)) {
+						$response->httpCode = $route->httpCode;
+						break;
+					}
+
+				} else {
+
+					$path = $route->getPath($request . "/index");
+					if($path !== NULL && file_exists($path)) {
+						$response->httpCode = "301 Moved Permanently"; 
+						$response->headers[] = "Location: " . $this->root . $request . "/";
+						break;
+					}
+
+				}
+
 			}
-			
-			$path = $route->getPath($indexRequest);
-			if(file_exists($path)) {
-				break;
-			}
+
 		}
 
-		if(is_null($route)) {
-			header("Status: 500 Internal Service Error");
-			echo "no route found and no proper 404";
-			exit("no route found and no proper 404");
+		if($route === NULL) {
+			$response->httpCode = "500 Internal Service Error";
+			$response->headers[] = "Status: 500 Internal Service Error";
+			$response->send("no route found and no proper 404");
+			exit('no route found and no proper 404');
+		} else {
+
+			$data = new Sight\ResponseData();		
+			$data->set("site.title",$this->title);
+			$data->set("site.root",$this->root);
+			$data->set("defaultTemplate",$this->defaultTemplatePath);
+			$data->set("document.path",$path);
+
+			$doc = new Sight\HtmlDocument($path);
+			$doc->setIncludes($this->includes);
+
+			$response->data = $data;
+			$response->document = $doc;
+
+			$route->runController($request,$response);
+			$response->send();
+
 		}
-
-		$data = new Sight\ResponseData();		
-		$data->set("site.title",$this->title);
-		$data->set("site.root",$this->root);
-		$data->set("defaultTemplate",$this->defaultTemplatePath);
-		$data->set("document.path",$path);
-		$route->runController($data,$request);
-
-
-		$response = new Sight\Response($route->httpCode);
-		$response->document->setIncludes($this->includes);
-		$response->document->setContents(
-			file_get_contents($path),
-			$data
-		);
-		$response->send();
 	}
 	
 	function route($url,$docPath,$controller=null) {

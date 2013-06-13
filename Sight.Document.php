@@ -1,4 +1,4 @@
-<?
+<?php
 
 namespace Sight;
 
@@ -9,8 +9,7 @@ class Document {
 		$this->path = $path;
 	}
 
-	function send() {
-		
+	function send($data) {
 		$finfo = finfo_open(FILEINFO_MIME_TYPE);
 		$mimetype = finfo_file($finfo, $path);
 

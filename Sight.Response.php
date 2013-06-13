@@ -3,13 +3,22 @@
 namespace Sight;
 
 class Response {
-	function __construct($httpCode=200) {
-		$this->httpCode = $httpCode;
-		$this->document = new HtmlDocument();
+
+	public $data = NULL;
+	public $httpCode = "200 OK";
+	public $document = NULL;
+
+	function __construct() {
+		$this->headers = array();
 	}
-	function send() {
+	function send($text=NULL) {
 		header("HTTP/1.1 " . $this->httpCode);
-		$this->document->send();	
+		foreach($this->headers as $header)
+			header($header);
+		if($text !== NULL)
+			echo $text;
+		if($this->document !== NULL)
+			$this->document->send($this->data);	
 	}	
 }
 

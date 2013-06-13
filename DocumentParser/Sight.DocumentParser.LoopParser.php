@@ -14,25 +14,13 @@ class LoopParser {
 		
 		if($matches = $result->stripOff("\s*@(\w+(?:[\w\.]+\w+)*) +as +@(\w+(?:[\w\.]+\w+)*)(?: += +@(\w+(?:[\w\.]+\w+)*))?")) {
 			
-			$count = count($matches);
-			$varName = "";
-			$varValue = "";
-
 			$iterableVarName = $matches[1];
 			$iterableVar = $data->get($iterableVarName);
-
-			if($count === 3) {
-				$varValue = $matches[2];
-			} elseif($count === 4) {
-				$varName = $matches[2];
-				$varValue = $matches[3];
-			}
+			$varName = $matches[3] != "" ? $matches[2] : "";
+			$varValue = $matches[3] != "" ? $matches[3] : $matches[2];
 			$subText = $result->unparsed;
 
 			$lastSubResult = null;
-
-			if(!is_array($iterableVar) && !is_object($iterableVar))
-				$iterableVar = array();
 
 			foreach($iterableVar as $key=>$value) {
 				if($varName != "")
@@ -46,7 +34,7 @@ class LoopParser {
 
 			if(is_null($lastSubResult)) {
 				$lastSubResult = new SubResult($subText);
-				BlockParser::parseRightSide($lastSubResult,$data);
+				Parser::parseRightSide($lastSubResult,$data);
 			}
 
 			$result->unparsed = $lastSubResult->unparsed;

@@ -33,6 +33,8 @@ class Routes {
 }
 
 class Route {
+	public $httpCode;
+	
 	function __construct($url,$path,$controller) {
 		$this->url = $url;
 		$this->path = $path;
@@ -56,12 +58,12 @@ class Route {
 		
 		return $result;
 	}
-	function runController($data,$url) {
+	function runController($url,$response) {
 		if(!$this->matchesUrl($url))
 			return null;
 		preg_match($this->url,$url,$urlMatches);
 
 		$controller = $this->controller;
-		$controller($data,$urlMatches);
+		$controller($response,$urlMatches);
 	}
 }

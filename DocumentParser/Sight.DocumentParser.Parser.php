@@ -75,7 +75,7 @@ class Parser {
 		
 	}
 
-	function parseEscapedSymbol($result) {
+	public static function parseEscapedSymbol($result) {
 		if($matches = $result->stripOff("@.")) {
 			$result->contents .= substr($matches[0],1,1);
 			return true;	
@@ -83,7 +83,7 @@ class Parser {
 		return false;
 	}
 	
-	function parseText($result) {
+	public static function parseText($result) {
 		if($matches = $result->stripOff("[^@]*+")) {
 			$result->contents .= $matches[0];
 			return true;
