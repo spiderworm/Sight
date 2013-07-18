@@ -22,19 +22,23 @@ class LoopParser {
 
 			$lastSubResult = null;
 
-			foreach($iterableVar as $key=>$value) {
-				if($varName != "")
-					$data->set($varName,$key);
-				$data->set($varValue,$value);
-				$lastSubResult = new SubResult($subText);
-				BlockParser::parseRightSide($lastSubResult,$data);
-				$result->add($lastSubResult);
+			if(is_array($iterableVar) || is_object($iterableVar)) {
+
+				foreach($iterableVar as $key=>$value) {
+					if($varName != "")
+						$data->set($varName,$key);
+					$data->set($varValue,$value);
+					$lastSubResult = new SubResult($subText);
+					BlockParser::parseRightSide($lastSubResult,$data);
+					$result->add($lastSubResult);
+				}
+
 			}
 
 
 			if(is_null($lastSubResult)) {
 				$lastSubResult = new SubResult($subText);
-				Parser::parseRightSide($lastSubResult,$data);
+				BlockParser::parseRightSide($lastSubResult,$data);
 			}
 
 			$result->unparsed = $lastSubResult->unparsed;
@@ -45,6 +49,14 @@ class LoopParser {
 		return false;
 	}
 	
+	public static function skip($result) {
+		if($matches = $result->stripOff("\s*@(\w+(?:[\w\.]+\w+)*) +as +@(\w+(?:[\w\.]+\w+)*)(?: += +@(\w+(?:[\w\.]+\w+)*))?")) {
+			BlockParser::skipRightSide($result,$data);
+			return true;
+		}
+		return false;
+	}
+
 }
 
 LoopParser::init();

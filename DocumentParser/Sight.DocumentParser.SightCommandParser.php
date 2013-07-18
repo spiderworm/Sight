@@ -33,6 +33,27 @@ class SightCommandParser {
 		return false;
 	}
 
+	public static function skip($result) {
+		if($matches = $result->stripOff("\s*@sight\.parser\.off([^\w\.]|$)")) {
+			
+			$contents = $matches[1] . $result->unparsed;
+			$unparsed = "";
+
+			$i = strpos($contents,"@sight.parser.on");
+
+			if($i != false) {
+				$unparsed = substr($contents,$i+16);
+				$contents = substr($contents,0,$i);
+			}
+
+			$result->unparsed = $unparsed;
+			
+			return true;
+		}
+		return false;
+
+	}
+
 }
 
 SightCommandParser::init();

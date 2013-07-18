@@ -8,14 +8,28 @@ require_once("Sight.HtmlDocument.php");
 class Sight {
 
 	private $root;
+	private $origin;
 	private $defaultTemplatePath;
 	private $includes;
 	
 	function __construct($title) {
 		$this->includes = array();
 		$this->title = $title;
+
+		$https = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != false;
+
+		$this->origin = 
+			($https ? "https" : "http") . "://" .
+			$_SERVER['HTTP_HOST'] .
+			($https ?
+				($_SERVER['SERVER_PORT'] !== "443" ? ":" . $_SERVER['SERVER_PORT'] : "") :
+				($_SERVER['SERVER_PORT'] !== "80" ? ":" . $_SERVER['SERVER_PORT'] : "")
+			)
+		;
+
 		preg_match("/^(.*\/)index\.php$/",$_SERVER['SCRIPT_NAME'],$matches);
 		$this->root = $matches[1];
+
 		$this->routes = new Sight\Routes();
 	}
 	
@@ -80,6 +94,7 @@ class Sight {
 			$data = new Sight\ResponseData();		
 			$data->set("site.title",$this->title);
 			$data->set("site.root",$this->root);
+			$data->set("site.origin",$this->origin);
 			$data->set("defaultTemplate",$this->defaultTemplatePath);
 			$data->set("document.path",$path);
 

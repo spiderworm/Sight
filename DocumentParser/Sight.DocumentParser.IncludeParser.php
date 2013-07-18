@@ -26,6 +26,16 @@ class IncludeParser {
 		return false;
 	}
 
+	public static function skip($result) {
+		if($matches = $result->stripOff("\s*@include *([^\r\n\f]*)")) {
+			BlockParser::skipRightSide($result);
+			return true;
+		}
+
+		return false;
+
+	}
+
 	public static function parseInclude($result,$data,$path) {
 		if(file_exists($path)) {
 			$includeResult = new SubResult(file_get_contents($path));

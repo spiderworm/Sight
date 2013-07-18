@@ -75,6 +75,53 @@ class Parser {
 		
 	}
 
+	public static function skip($result) {
+
+		while(!$result->isReady()) {			
+	
+			self::skipText($result);
+
+			if(BlockParser::skipBlockEnd($result)) {
+				break;
+			}
+
+			if(SightCommandParser::skip($result)) {
+				continue;
+			}				
+				
+			if(BlockParser::skip($result)) {
+				continue;	
+			}
+			
+			if(ConditionParser::skip($result)) {
+				continue;
+			}
+				
+			if(LoopParser::skip($result)) {
+				continue;
+			}
+
+			if(IncludeParser::skip($result)) {
+				continue;
+			}
+			
+			if(TemplateParser::skip($result)) {
+				$result->parsedTemplate = true;
+				continue;
+			}
+
+			if(VariableParser::skip($result)) {
+				continue;
+			}
+			
+			if(self::skipEscapedSymbol($result)) {
+				continue;
+			}
+			
+		}
+
+	}
+
 	public static function parseEscapedSymbol($result) {
 		if($matches = $result->stripOff("@.")) {
 			$result->contents .= substr($matches[0],1,1);
@@ -83,6 +130,13 @@ class Parser {
 		return false;
 	}
 	
+	public static function skipEscapedSymbol($result) {
+		if($matches = $result->stripOff("@.")) {
+			return true;
+		}
+		return false;
+	}
+
 	public static function parseText($result) {
 		if($matches = $result->stripOff("[^@]*+")) {
 			$result->contents .= $matches[0];
@@ -91,6 +145,12 @@ class Parser {
 		return false;
 	}
 
+	public static function skipText($result) {
+		if($matches = $result->stripOff("[^@]*+")) {
+			return true;
+		}
+		return false;
+	}
 }
 
 Parser::init();

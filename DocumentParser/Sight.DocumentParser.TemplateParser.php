@@ -28,6 +28,14 @@ class TemplateParser {
 		return false;
 	}
 	
+	public static function skip($result) {
+		if($matches = $result->stripOff(self::$templateRegex)) {
+			BlockParser::skipRightSide($result);
+			return true;
+		}
+		return false;
+	}
+
 	public static function parseTemplate($result,$data,$templatePath) {
 		if(file_exists($templatePath)) {
 

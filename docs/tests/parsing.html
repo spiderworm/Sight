@@ -1,0 +1,84 @@
+@document.title = Parsing Tests
+
+<article>
+	<h1>@document.title</h1>
+
+	<section>
+		<h1>No-Parse Block</h1>
+		
+		@testVariable = If you are seeing this in the rendered page, the test has failed
+		
+		@sight.parser.off
+			@testVariable
+		@sight.parser.on
+		
+		<p>If you see "@testVariable" above, the test has failed.  If you see "@@testVariable", the test has passed.</p>
+		
+	</section>
+
+	<section>
+		<h1>@if Statement Tests</h1>
+
+		<section>
+			<h1>Statement Is True</h1>
+
+			<section>
+				<h1>Same Line Result</h1>
+
+				@testVar1 = test
+				@testVar2 = test
+
+				@if (@testVar1 == @testVar2) <p>Test One Passed</p>
+				
+				@if(@testVar1==@testVar2)<p>Test Two Passed</p>
+
+				@if      (@testVar1     ==       @testVar2)        <p>Test Three Passed</p>
+
+				@if (@testVar1 == test) <p>Test Four Passed</p>
+
+				<p>Four tests should have passed</p>
+
+			</section>
+
+			<section>
+				<h1>Block Result</h1>
+
+				@testVar1 = test
+				@testVar2 = test
+
+				@if (@testVar1 == @testVar2) @{<p>Test One Passed</p>@}
+				
+				@if (@testVar1 == @testVar2) @{
+					<p>Test Two Passed</p>
+				@}
+
+				@if (@testVar1 == @testVar2) @{
+					<p>Test Three Passed</p>
+					
+					@if(@testVar3 == FALSEYPOO) @{
+						<p>... unless this shows up</p>
+					@}
+
+				@}
+
+				@if (@testVar1 == @testVar2) @{
+					<p>Test Four Passed</p>
+
+					@each @testVar3 as @blah = @whatever @{
+						<p>... unless this shows up</p>
+					@}
+
+				@}
+
+				<p>Four tests should have passed</p>
+
+			</section>
+
+		</section>
+
+	</section>
+
+
+</article>
+
+

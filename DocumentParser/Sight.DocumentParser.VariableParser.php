@@ -8,18 +8,31 @@ class VariableParser {
 	public static $varEchoRegExp;
 	public static $siteRootEchoRegExp;
 	public static $defaultDocumentTemplateSetterRegExp;
+	public static $varEqualityCompareRegExp;
 
 	public static function init() {
 		self::$varSetterRegExp = Parser::$varRegExp . " *= *";
 		self::$varEchoRegExp = Parser::$varRegExp;
 		self::$siteRootEchoRegExp = "@site\.root[\/\\\]?";
 		self::$defaultDocumentTemplateSetterRegExp = "@defaultDocumentTemplate +([^\s]*)";
+		self::$varEqualityCompareRegExp = Parser::$varRegExp . " *== *";
 	}
 	
 	public static function parse($result,$data) {
-		
+
 		if($matches = $result->stripOff(self::$defaultDocumentTemplateSetterRegExp)) {
 			$result->defaultDocumentTemplatePath = $matches[1];
+			return true;
+		}
+
+		if($matches = $result->stripOff(self::$varEqualityCompareRegExp)) {
+			$subResult = $result->pullSubParse();
+			BlockParser::parseRightSide($subResult,$data);
+			if($data->get($matches[1]) == $subResult->contents) {
+				$result->contents .= "true";
+			} else {
+				$result->contents .= "false";
+			}
 			return true;
 		}
 		
@@ -31,11 +44,6 @@ class VariableParser {
 			return true;
 		}
 		
-		if($matches = $result->stripOff(self::$siteRootEchoRegExp)) {
-			$result->contents .= $data->get("site.root");
-			return true;
-		}
-		
 		if($matches = $result->stripOff(self::$varEchoRegExp)) {
 			$result->contents .= strval($data->get($matches[1]));
 			return true;
@@ -44,6 +52,47 @@ class VariableParser {
 		return false;
 	}
 	
+	public static function skip($result) {
+
+		if($matches = $result->stripOff(self::$defaultDocumentTemplateSetterRegExp)) {
+			return true;
+		}
+		
+		if($matches = $result->stripOff(self::$varEqualityCompareRegExp)) {
+			BlockParser::skipRightSide($result);
+			return true;
+		}
+		
+		if($matches = $result->stripOff(self::$varSetterRegExp)) {
+			BlockParser::skipRightSide($result);
+			return true;
+		}
+		
+		if($matches = $result->stripOff(self::$varEchoRegExp)) {
+			return true;
+		}
+		
+		return false;
+	}
 }
 
 VariableParser::init();
+
+
+
+
+
+
+class ExpressionEvaluator {
+
+	public static function evaluate($expression,$data) {
+		$result = false;
+
+		$subResult = new SubResult($expression);
+
+		VariableParser::parse($subResult,$data);
+
+		return $subResult->contents === "true";
+	}
+
+}
