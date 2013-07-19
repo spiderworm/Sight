@@ -27,7 +27,7 @@ class Sight {
 			)
 		;
 
-		preg_match("/^(.*\/)index\.php$/",$_SERVER['SCRIPT_NAME'],$matches);
+		preg_match("/^(.*)\/index\.php$/",$_SERVER['SCRIPT_NAME'],$matches);
 		$this->root = $matches[1];
 
 		$this->routes = new Sight\Routes();
@@ -116,8 +116,10 @@ class Sight {
 		$this->routes->add($url,$docPath,$controller);
 	}
 	
-	function routeError($errorCode,$docPath) {
-		$this->routes->errorAdd($errorCode,$docPath);
+	function routeError($errorCode,$docPath,$controller=null) {
+		if(is_null($controller))
+			$controller = function($o,$urlMatches) { };
+		$this->routes->errorAdd($errorCode,$docPath,$controller);
 	}
 	
 	function getUrl($path) {

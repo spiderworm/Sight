@@ -11,8 +11,8 @@ class Routes {
 		$route = new Route($url,$docPath,$controller);
 		$this->routes[] = $route;
 	}
-	function errorAdd($errorCode, $docPath) {
-		$this->errorRoutes[$errorCode] = new Route("//",$docPath,function(){});
+	function errorAdd($errorCode, $docPath, $controller) {
+		$this->errorRoutes[$errorCode] = new Route("//",$docPath,$controller);
 		$this->errorRoutes[$errorCode]->httpCode = $errorCode;
 	}
 	function findRoutes($request) {
