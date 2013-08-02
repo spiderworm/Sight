@@ -35,11 +35,11 @@ class BlockParser {
 
 	}
 
-	public static function skipBlock($result,$data) {
+	public static function skipBlock($result) {
 		if($result->stripOff("\s*@\{")) {
 			$sub = $result->pullSubParse();
 			Parser::skip($sub);
-			$result->contents = "";
+			$sub->contents = "";
 			$result->foldInSubParse($sub);
 			return true;
 		}
@@ -63,8 +63,8 @@ class BlockParser {
 		return false;
 	}
 
-	static public function skipRightSide($result,$data) {
-		if(self::skipBlock($result,$data)) {
+	static public function skipRightSide($result) {
+		if(self::skipBlock($result)) {
 			return true;
 		}
 		

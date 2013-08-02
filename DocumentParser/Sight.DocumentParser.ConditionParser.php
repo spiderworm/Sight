@@ -14,7 +14,16 @@ class ConditionParser {
 			if($positive) {
 				BlockParser::parseRightSide($result,$data);
 			} else {
-				BlockParser::skipRightSide($result,$data);
+				BlockParser::skipRightSide($result);
+			}
+
+			if($result->stripOff("\s*@else *")) {
+
+				if($positive) {
+					BlockParser::skipRightSide($result);
+				} else {
+					BlockParser::parseRightSide($result,$data);
+				}
 			}
 
 			return true;

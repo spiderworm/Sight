@@ -70,7 +70,13 @@
 
 				@}
 
-				<p>Four tests should have passed</p>
+				@if (@testVar1 == @testVar2) @{
+					<p>Test Five Passed</p>
+				@} @else @{
+					<p>Test Five Failed</p>
+				@}
+
+				<p>Five tests should have passed</p>
 
 			</section>
 

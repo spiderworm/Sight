@@ -41,29 +41,77 @@ class Route {
 		$this->controller = $controller;
 		$this->httpCode = "200";
 	}
-	function matchesUrl($url) {
-		return preg_match($this->url,$url) > 0;
-	}
-	function getPath($url) {
-		if(!$this->matchesUrl($url))
-			return null;
+	public function getResponse($url,$webRoot) {
+		$response = NULL;
 
-		preg_match($this->url,$url,$matches);
-		$needles = array();
-		for($j=0; $j<count($matches); $j++) {
-			$needles[] = "$" . $j;
+		if(!$this->matchesUrl($url))
+			return $response;
+
+		if($url === "" || $url === "/") {
+
+			$path = $this->getFilePath("index");
+			if($path !== NULL && file_exists($path)) {
+				$response = new Response();
+				$response->httpCode = $this->httpCode;
+				$response->document = new HtmlDocument($path);
+			}
+
+		} else {
+
+			$path = $this->getFilePath($url);
+			if($path !== NULL && file_exists($path)) {
+				$response = new Response();
+				$response->httpCode = $this->httpCode;
+				$response->document = new HtmlDocument($path);
+			}
+
+			if($url[strlen($url)-1] === "/") {
+
+				$path = $this->getFilePath($url . "index");
+				if($path !== NULL && file_exists($path)) {
+					$response = new Response();
+				$response->httpCode = $this->httpCode;
+					$response->document = new HtmlDocument($path);
+				}
+
+			} else {
+
+				$path = $this->getFilePath($url . "/index");
+				if($path !== NULL && file_exists($path)) {
+					$response = new Response();
+					$response->httpCode = "301 Moved Permanently"; 
+					$response->headers[] = "Location: " . $webRoot . "/" . $url . "/";
+				}
+
+			}
+
 		}
 
-		$result = str_replace($needles,$matches,$this->path);	
-		
+		return $response;
+
+	}
+	public function matchesUrl($url) {
+		return preg_match($this->url,$url) > 0;
+	}
+	private function getFilePath($url) {
+		$result = NULL;
+		preg_match($this->url,$url,$matches);
+		if($matches) {
+			$needles = array();
+			for($j=0; $j<count($matches); $j++) {
+				$needles[] = "$" . $j;
+			}
+
+			$result = str_replace($needles,$matches,$this->path);	
+		}
 		return $result;
 	}
-	function runController($url,$response) {
+	public function runController($url,$response) {
 		if(!$this->matchesUrl($url))
 			return null;
 		preg_match($this->url,$url,$urlMatches);
 
 		$controller = $this->controller;
-		$controller($response,$urlMatches);
+		return $controller($response,$urlMatches);
 	}
 }

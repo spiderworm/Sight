@@ -35,78 +35,46 @@ class Sight {
 	
 	function respond() {
 
-		$response = new Sight\Response();
-
 		$request = array_key_exists('url',$_GET) ? $_GET['url'] : "";
 
 		$routes = $this->routes->findRoutes($request);
-		
+
 		$route = NULL;
 		$path = "";
-		
+
 		foreach($routes as $route) {
-			if($request === "" || $request === "/") {
 
-				$path = $route->getPath("index");
-				if($path !== NULL && file_exists($path)) {
-					$response->httpCode = $route->httpCode;
-					break;
-				}
+			$response = $route->getResponse($request,$this->root);
 
-			} else {
+			if($response !== NULL) {
+				$data = new Sight\ResponseData();
+				$data->set("site.title",$this->title);
+				$data->set("site.root",$this->root);
+				$data->set("site.origin",$this->origin);
+				$data->set("defaultTemplate",$this->defaultTemplatePath);
+				$response->data = $data;
 
-				$path = $route->getPath($request);
-				if($path !== NULL && file_exists($path)) {
-					$response->httpCode = $route->httpCode;
-					break;
-				}
-
-				if($request[strlen($request)-1] === "/") {
-
-					$path = $route->getPath($request . "index");
-					if($path !== NULL && file_exists($path)) {
-						$response->httpCode = $route->httpCode;
-						break;
-					}
-
+				$result = $route->runController($request,$response);
+				if($result === false) {
+					$response = NULL;
 				} else {
-
-					$path = $route->getPath($request . "/index");
-					if($path !== NULL && file_exists($path)) {
-						$response->httpCode = "301 Moved Permanently"; 
-						$response->headers[] = "Location: " . $this->root . $request . "/";
-						break;
-					}
-
+					break;
 				}
-
 			}
 
 		}
 
-		if($route === NULL) {
+		if($response === NULL) {
+			$response = new Sight\Response();
 			$response->httpCode = "500 Internal Service Error";
 			$response->headers[] = "Status: 500 Internal Service Error";
-			$response->send("no route found and no proper 404");
+			$response->send();
 			exit('no route found and no proper 404');
 		} else {
-
-			$data = new Sight\ResponseData();		
-			$data->set("site.title",$this->title);
-			$data->set("site.root",$this->root);
-			$data->set("site.origin",$this->origin);
-			$data->set("defaultTemplate",$this->defaultTemplatePath);
-			$data->set("document.path",$path);
-
-			$doc = new Sight\HtmlDocument($path);
-			$doc->setIncludes($this->includes);
-
-			$response->data = $data;
-			$response->document = $doc;
-
-			$route->runController($request,$response);
+			//$data->set("document.path",$path);
+			if($response->document)
+				$response->document->setIncludes($this->includes);
 			$response->send();
-
 		}
 	}
 	
