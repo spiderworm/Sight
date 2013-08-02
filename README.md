@@ -15,7 +15,7 @@ Sight takes a request coming in to your webserver, such as:
 ... to match it up with a template file, which could contain something like:
 
 1.  `<article>`
-2.  `  <h1>This is your **@adjective** page</h1>`
+2.  `  <h1>This is your @adjective page</h1>`
 3.  `</article>`
 
 ... which could output something like:
