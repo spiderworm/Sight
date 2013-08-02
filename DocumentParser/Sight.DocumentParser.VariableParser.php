@@ -45,7 +45,15 @@ class VariableParser {
 		}
 		
 		if($matches = $result->stripOff(self::$varEchoRegExp)) {
-			$result->contents .= strval($data->get($matches[1]));
+			$value = $data->get($matches[1]);
+			if (is_callable($value)) //is_object($value) && ($value instanceof Closure))
+			{
+				$result->contents .= $value();
+			}
+			else
+			{
+				$result->contents .= strval($value);
+			}
 			return true;
 		}
 		
