@@ -1,0 +1,61 @@
+@document.title = Learning Routes
+
+<article>
+	<h1>@document.title</h1>
+
+	<section>
+		<h1>What is routing?</h1>
+
+		<p>Routing is at the very heart of Sight. For many advanced web applications, routing is the key to turning a url such as:</p>
+
+		<p><code>http://thebank.com/users/aK9dfj9/profile</code></p>
+
+		<p>... into a webpage with that user's data.  It does this by matching the user ID portion of the URL (in this case, "aK9dfj9"), performing a data lookup against that user ID, and populating a template with that data.</p>
+
+	</section>
+
+	<section>
+		<h1>The simplest route</h1>
+
+		<p>The very simplest example of routing is the one that's in index.php of the project template.  It looks like this:</p>
+
+		<ol class="code-sample">
+			<li class="code-line"><code>$sight->route(</code></li>
+			<li class="code-line"><code>&nbsp;&nbsp;/^.*$/",</code></li>
+			<li class="code-line"><code>&nbsp;&nbsp;"pages/$0.html"</code></li>
+			<li class="code-line"><code>);</code></li>
+		</ol>
+
+		<p>This routes all requests to the corresponding .html file in the pages/ directory.  This also routes recursively, so a request for <code>/this/is/a/test/request</code> will route to <code>pages/this/is/a/test/request.html</code>.</p>
+
+		<p>More complicated routing techniques, including extracting data from the URL, is covered in the <a href="./controllers">Controllers portion of the tutorial</a>.</p>
+
+	</section>
+
+	<section>
+		<h1>404 routing</h1>
+
+		<p>One of the first routes you should take care of is the 404 route.  This is the route that gets activated if someone requests a page that doesn't exist.  You already knew that, undoubtedly... but did you know how simple it is to set a single 404 page for the whole site?</p>
+
+		<ol class="code-sample">		
+			<li class="code-line"><code>$sight->routeError(</code></li>
+			<li class="code-line"><code>&nbsp;&nbsp;404,</code></li>
+			<li class="code-line"><code>&nbsp;&nbsp;"pages/404.html"</code></li>
+			<li class="code-line"><code>);</code></li>
+		</ol>
+
+		<p>Done.</p>
+	</section>
+
+	<section>
+		<h1>The importance of route order</h1>
+
+		<p>If you are defining more than one route, routes are evaluated starting with the first route that was added, and ending with the last route.  As soon as it finds a route that matches the request, it stops searching and evaluates the matched template immediately.  If, for some reason, no route matches the request, the 404 route is selected.</p>
+	</section>
+
+	<aside>
+		<h1>Next up</h1>
+		<p><a href="./controllers">Controllers</a></p>
+	</aside>
+	
+</article>
