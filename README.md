@@ -37,17 +37,17 @@ So in other words...
 # Check your prereqs
 
 *   Apache
-**   with the mod_rewrite module installed and enabled, and
-**   .htaccess files enabled via the AllowOverride directive
+    *   with the mod_rewrite module installed and enabled, and
+    *   .htaccess files enabled via the AllowOverride directive
 *   PHP 5.3 or later, properly configured and working with Apache
 
 # Get the code
 
 Currently, the only way to get the code is to retrieve it from GitHub.
 
-1.  Go to [the GitHub page](https://github.com/spiderworm/Sight).
-2.  Download the library by clicking the "Download ZIP" button.
-3.  Extract the files files from the .zip.
+*  Go to [the GitHub page](https://github.com/spiderworm/Sight).
+*  Download the library by clicking the "Download ZIP" button.
+*  Extract the files files from the .zip.
 
 Users experienced with Git may prefer to clone the repository instead.  That's OK too.
 
@@ -59,8 +59,6 @@ Copy the extracted Sight/ directory over to somewhere more permanent on your sys
 
 *Create your project directory under the document root (unless it's already created, such as when you're installing straight to the document root).
 *Inside the Sight directory you just installed is another directory called project-template/.  Copy the contents of project-template/ to your project directory.
-
-		<section>
 
 # Modify your .htaccess file
 
