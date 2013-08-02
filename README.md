@@ -45,8 +45,7 @@ So in other words...
 
 Currently, the only way to get the code is to retrieve it from GitHub.
 
-*  Go to [the GitHub page](https://github.com/spiderworm/Sight).
-*  Download the library by clicking the "Download ZIP" button.
+*  [Download the .zip archive](https://github.com/spiderworm/Sight/archive/master.zip).
 *  Extract the files files from the .zip.
 
 Users experienced with Git may prefer to clone the repository instead.  That's OK too.
@@ -59,6 +58,16 @@ Copy the extracted Sight/ directory over to somewhere more permanent on your sys
 
 *    Create your project directory under the document root (unless it's already created, such as when you're installing straight to the document root).
 *    Inside the Sight directory you just installed is another directory called project-template/.  Copy the contents of project-template/ to your project directory.
+
+# Modify your index.php file
+
+The index.php file needs to link to Sight.php in order to run.
+
+Find the line that looks like this:
+
+`require_once("../Sight.php");`
+
+... and change it so that it points to Sight.php in the installed Sight/ directory.
 
 # Modify your .htaccess file
 
