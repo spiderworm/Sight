@@ -57,8 +57,8 @@ Copy the extracted Sight/ directory over to somewhere more permanent on your sys
 
 # Setting up your project
 
-*Create your project directory under the document root (unless it's already created, such as when you're installing straight to the document root).
-*Inside the Sight directory you just installed is another directory called project-template/.  Copy the contents of project-template/ to your project directory.
+*    Create your project directory under the document root (unless it's already created, such as when you're installing straight to the document root).
+*    Inside the Sight directory you just installed is another directory called project-template/.  Copy the contents of project-template/ to your project directory.
 
 # Modify your .htaccess file
 
