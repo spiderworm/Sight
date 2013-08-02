@@ -1,0 +1,12 @@
+# BEGIN Sight
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /Sight/project-template/
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /Sight/project-template/index.php?url=$1&%{QUERY_STRING} [L]
+</IfModule>
+
+# END Sight

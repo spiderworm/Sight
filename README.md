@@ -73,7 +73,7 @@ Find the line that looks like this:
 
 The .htaccess file is an important part of the routing process.
 
-Open the .htaccess file in your favorite text editor.  Find the two places in the file where you see `project-template/`.  Replace `project-template` with the path of your project directory relative to the Apache document root.
+Open the .htaccess file in your favorite text editor.  Find the two places in the file where you see `Sight/project-template/`.  Replace `Sight/project-template/` with the path of your project directory relative to the Apache document root.
 
 For example, if my project directory was at:
 
@@ -83,7 +83,7 @@ For example, if my project directory was at:
 
 `<document root>/my-root/.htaccess`
 
-... then in the .htaccess file, I would be replacing the two spots where it says `project-template/` with `my-root/`.
+... then in the .htaccess file, I would be replacing the two spots where it says `Sight/project-template/` with `my-root/`.
 
 # Verify
 
