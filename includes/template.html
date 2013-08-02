@@ -1,9 +1,18 @@
 <!doctype html>
 <html>
 	<head>
-		<title>@site.title</title>
+		<title>@document.title :: @site.title</title>
 	</head>
 	<body>
-@contents
+
+		<header>
+			<hgroup>
+				<h1>Sight</h1>
+				<h2>MVC framework for PHP</h2>
+			</hgroup>
+		</header>
+
+		<main>@contents</main>
+
 	</body>
 </html>

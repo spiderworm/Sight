@@ -1,3 +1,51 @@
-@document.title = "test"
+@document.title = Welcome to Sight
 
-coming soon!
+<article>
+	<h1>What is Sight</h1>
+
+	<p>Sight is an MVC framework to help with rapid development of advanced web applications.</p>
+
+	<section>
+		<h1>What it does</h1>
+
+		<p>Sight takes a request coming in to your webserver, such as:</p>
+
+		<p><code>http://yourdomain.com/<strong>your/imporant/file</strong></code></p>
+
+		<p>... and uses a regular expression such as:</p>
+
+		<code>/^your\/([^\/])\/file$/</code>
+
+		<p>... to match it up with a template file, which could contain something like:</p>
+
+		<ol class="code-sample">
+			<li class="code-line"><code>&lt;article&gt;</code></li>
+			<li class="code-line"><code>&nbsp;&nbsp;&lt;h1&gt;This is your <strong>@@adjective</strong> page&lt;h1&gt;</code></li>
+			<li class="code-line"><code>&lt;/article&gt;</code></li>
+		</ol>
+
+		<p>... which could output something like:</p>
+
+		<div class="output-sample">
+			<p><strong>This is your important page</strong></p>
+		</div>
+
+		<p>So in other words...</p>
+
+		<p><strong>TL;DR:</strong> Sight allows you to capture data from requests, convert that data into something that would be useful to a template, and pass that data to the template, which gets rendered and returned to the user as their page.</p>
+	</section>
+
+	<section>
+		<h1>Would you like to:</h1>
+
+		<ul role="menu">
+			<li>Learn how to <a href="#install-instructions">install Sight</a>, or</li>
+			<li>Learn more about <a href="#tutorial">how to use Sight</a>?</li>
+		</ul>
+	</section>
+
+</article>
+
+@inPageLinks = true
+@include pages/install-instructions.html
+@include pages/tutorial/index.html

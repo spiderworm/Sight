@@ -1,0 +1,97 @@
+@document.title = Install Instructions
+
+<article>
+	<h1><a name="install-instructions">@document.title</a></h1>
+
+	<section>
+		<h1>Check your prereqs</h1>
+
+		<ul>
+			<li>Apache
+				<ul>
+					<li>with the mod_rewrite module installed and enabled, and</li>
+					<li>.htaccess files enabled via the AllowOverride directive</li>
+				</ul>
+			</li>
+			<li>
+				PHP 5.3 or later, properly configured and working with Apache
+			</li>
+		</ul>
+
+	</section>
+
+	<section>
+		<h1>Get the code</h1>
+
+		<p>Currently, the only way to get the code is to retrieve it from GitHub.</p>
+
+		<ol class="instructions">
+			<li>Go to <a href="https://github.com/spiderworm/Sight">the GitHub page</a>.</li>
+			<li>Download the library by clicking the "Download ZIP" button.</li>
+			<li>Extract the files files from the .zip.</li>
+		</ol>
+
+		<p>Users experienced with Git may prefer to clone the repository instead.  That's OK too.</p>
+
+	</section>
+
+	<section>
+		<h1>Install</h1>
+
+		<p>Copy the extracted Sight/ directory over to somewhere more permanent on your system.  I suggest <strong>not</strong> installing anywhere under your Apache document root, but it's up to you.</p>
+
+	</section>
+
+	<section>
+		<h1>Setting up your project</h1>
+
+		<ol class="instructions">
+			<li>Create your project directory under the document root (unless it's already created, such as when you're installing straight to the document root).</li>
+			<li>Inside the Sight directory you just installed is another directory called project-template/.  Copy the contents of project-template/ to your project directory.</li>
+		</ol>
+
+		<section>
+			<h1>Modify your .htaccess file</h1>
+
+			<p>The .htaccess file is an important part of the routing process.</p>
+
+			<p>Open the .htaccess file in your favorite text editor.  Find the two places in the file where you see <code>project-template/</code>.  Replace <code>project-template</code> with the path of your project directory relative to the Apache document root.</p>
+
+			<p>For example, if my project directory was at:</p>
+
+			<p><code>&lt;document root&gt;/my-root/</code></p>
+
+			<p>... and my .htaccess file was at:</p>
+
+			<p><code>&lt;document root&gt;/my-root/.htaccess</code></p>
+
+			<p>... then in the .htaccess file, I would be replacing the two spots where it says <code>project-template/</code> with <code>my-root/</code>.</p>
+
+		</section>
+
+	</section>
+
+	<section>
+		<h1>Verify</h1>
+
+		<p>So now hopefully you'll have things up and running. Verify that by hitting your project directory via Apache in your browser. If you don't get an error of some sort, and you see the page saying "Your new Sight site is working", then you're good to go.  If you get errors, then fix your errors before moving on.</p>
+
+		<p>That page will contain some instructions for further verifying your installation.  Follow those instructions as well.
+		</p>
+
+	</section>
+
+	<section>
+		<h1>Would you like to:</h1>
+
+		<p>Learn more about <a
+			@if(@inPageLinks == true) @{
+				href="#tutorial"
+			@} @else @{
+				href="@site.root/tutorial"
+			@}
+		>how to use Sight</a>?</p>
+
+	</section>
+
+</article>

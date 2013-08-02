@@ -69,7 +69,7 @@ class Sight {
 			$response->httpCode = "500 Internal Service Error";
 			$response->headers[] = "Status: 500 Internal Service Error";
 			$response->send();
-			exit('no route found and no proper 404');
+			exit('Sight: no route found and no proper 404');
 		} else {
 			//$data->set("document.path",$path);
 			if($response->document)
