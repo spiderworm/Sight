@@ -31,6 +31,12 @@ class Sight {
 		$this->root = $matches[1];
 
 		$this->routes = new Sight\Routes();
+
+		$this->data = new Sight\ResponseData();
+		$this->data->set("site.title",$this->title);
+		$this->data->set("site.root",$this->root);
+		$this->data->set("site.origin",$this->origin);
+		$this->data->set("defaultTemplate","");
 	}
 	
 	function respond() {
@@ -47,12 +53,7 @@ class Sight {
 			$response = $route->getResponse($request,$this->root);
 
 			if($response !== NULL) {
-				$data = new Sight\ResponseData();
-				$data->set("site.title",$this->title);
-				$data->set("site.root",$this->root);
-				$data->set("site.origin",$this->origin);
-				$data->set("defaultTemplate",$this->defaultTemplatePath);
-				$response->data = $data;
+				$response->data = $this->data->copy();
 
 				$result = $route->runController($request,$response);
 				if($result === false) {
@@ -98,7 +99,7 @@ class Sight {
 	}
 	
 	function setDefaultTemplate($templateDocPath) {
-		$this->defaultTemplatePath = $templateDocPath;
+		$this->data->set('defaultTemplate',$templateDocPath);
 	}
 	
 	function addInclude($path) {

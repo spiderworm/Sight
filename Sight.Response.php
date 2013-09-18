@@ -23,6 +23,11 @@ class Response {
 }
 
 class EnhancedStdClass {
+	function copy() {
+		$clone = clone $this;
+		var_dump($clone);
+		die();
+	}
 	function __toString() {
 		$result = "";
 		foreach($this as $key=>$value) {
@@ -40,12 +45,27 @@ class EnhancedStdClass {
 			$result .= "\n";
 		}
 		return $result;
-	}	
+	}
+	function __clone() {
+		$result = new EnhancedStdClass();
+		foreach($this as $key=>$value) {
+			if(is_object($value)) {
+				if(is_callable($value)) {
+					$result->$key = $value;
+				} else {
+					$result->$key = clone $value;
+				}
+			} else {
+				$result->$key = $value;
+			}
+		}
+		return $result;
+	}
 }
 
 class ResponseData {
 	function __construct() {
-		$this->data = new \stdClass();
+		$this->data = new EnhancedStdClass();
 	}
 	function set($path,$value) {
 		$dataPath = explode(".",$path);
@@ -79,6 +99,9 @@ class ResponseData {
 
 		return $this->getValueAt($current,$path);
 	}
+	function copy() {
+		return clone $this;
+	}
 	private function getValueAt($obj,$path) {
 		if(is_object($obj)) {
 			if(isset($obj->$path))
@@ -88,6 +111,11 @@ class ResponseData {
 				return $obj[$path];
 		}
 		return null;
+	}
+	function __clone() {
+		$responseData = new ResponseData();
+		$responseData->data = clone $this->data;
+		return $responseData;
 	}
 	
 }

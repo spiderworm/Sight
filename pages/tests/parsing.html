@@ -17,74 +17,78 @@
 	</section>
 
 	<section>
-		<h1>@if Statement Tests</h1>
+		<h1>@@if Statement Tests</h1>
 
 		<section>
-			<h1>Statement Is True</h1>
+			<h1>Comparing Variable Equality</h1>
 
 			<section>
-				<h1>Same Line Result</h1>
+				<h1>Variables Are Equal</h1>
 
-				@testVar1 = test
-				@testVar2 = test
+				@var2 = @var1
 
-				@if (@testVar1 == @testVar2) <p>Test One Passed</p>
-				
-				@if(@testVar1==@testVar2)<p>Test Two Passed</p>
-
-				@if      (@testVar1     ==       @testVar2)        <p>Test Three Passed</p>
-
-				@if (@testVar1 == test) <p>Test Four Passed</p>
-
-				<p>Four tests should have passed</p>
-
+				<ol>
+					<li>
+						@if (@var1 == @var2) passed
+					</li>
+					<li>
+						@if(@var1==@var2) @{ passed @}
+					</li>
+					<li>
+						@if(@var2==@var1) @{ passed @} @else @{ failed @}
+					</li>
+					<li>
+						@if      (@var1     ==       @var2) @{ passed
+						@} @else @{ 
+							failed @}
+					</li>
+					<li>
+						@if(@true) @{ passed @}
+					</li>
+					<li>
+						@if(@true==true) @{ passed @}
+					</li>
+				</ol>
 			</section>
 
 			<section>
-				<h1>Block Result</h1>
+				<h1>Variables Aren't Equal</h1>
 
-				@testVar1 = test
-				@testVar2 = test
+				@var2 = not @var1
 
-				@if (@testVar1 == @testVar2) @{<p>Test One Passed</p>@}
-				
-				@if (@testVar1 == @testVar2) @{
-					<p>Test Two Passed</p>
-				@}
-
-				@if (@testVar1 == @testVar2) @{
-					<p>Test Three Passed</p>
-					
-					@if(@testVar3 == FALSEYPOO) @{
-						<p>... unless this shows up</p>
-					@}
-
-				@}
-
-				@if (@testVar1 == @testVar2) @{
-					<p>Test Four Passed</p>
-
-					@each @testVar3 as @blah = @whatever @{
-						<p>... unless this shows up</p>
-					@}
-
-				@}
-
-				@if (@testVar1 == @testVar2) @{
-					<p>Test Five Passed</p>
-				@} @else @{
-					<p>Test Five Failed</p>
-				@}
-
-				<p>Five tests should have passed</p>
-
-			</section>
-
+				<ol>
+					<li>
+						@if (@var1 == @var2) @{failed@}@else@{passed@}
+					</li>
+					<li>
+						@if(@var1==var2) @{ 
+							failed @} @else @{ passed @}
+					</li>
+					<li>
+						@if(@false) @{
+							failed
+						@} @else @{
+							passed
+						@}
+					</li>
+					<li>
+						@if(@false==true) @{
+							failed
+						@} @else @{
+							passed
+						@}
+					</li>
+					<li>
+						@if(@false==asdf) @{ failed @} @else @{ passed @}
+					</li>
+					<li>
+						@if(@true==2) @{ failed @} @else @{ passed @}
+					</li>
+				</ol>
+			</section>			
 		</section>
 
 	</section>
 
-
 </article>
-
 

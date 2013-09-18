@@ -28,7 +28,8 @@ class VariableParser {
 		if($matches = $result->stripOff(self::$varEqualityCompareRegExp)) {
 			$subResult = $result->pullSubParse();
 			BlockParser::parseRightSide($subResult,$data);
-			if($data->get($matches[1]) == $subResult->contents) {
+
+			if(self::toString($data->get($matches[1])) == self::toString($subResult->contents)) {
 				$result->contents .= "true";
 			} else {
 				$result->contents .= "false";
@@ -82,6 +83,18 @@ class VariableParser {
 		
 		return false;
 	}
+
+	private static function toString($input) {
+		if(is_bool($input)) {
+			if($input === true)
+				return "true";
+			if($input === false)
+				return "false";
+		} else {
+			return (string)$input;
+		}
+	}
+
 }
 
 VariableParser::init();
