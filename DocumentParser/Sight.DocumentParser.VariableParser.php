@@ -51,6 +51,13 @@ class VariableParser {
 			{
 				$result->contents .= $value();
 			}
+			else if(is_bool($value))
+			{
+				if($value===true)
+					$result->contents .= "true";
+				else
+					$result->contents .= "false";
+			}
 			else
 			{
 				$result->contents .= strval($value);
